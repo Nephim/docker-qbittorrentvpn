@@ -63,6 +63,7 @@ RUN apt update && apt install -y --no-install-recommends \
     openvpn \
     procps \
     wireguard-tools \
+    resolvconf \
     unrar \
     p7zip-full \
     unzip \
