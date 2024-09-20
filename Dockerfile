@@ -1,5 +1,5 @@
 # Stage 1: Build stage for qBittorrent
-FROM ubuntu:noble as builder
+FROM ubuntu:noble AS builder
 
 WORKDIR /build
 
