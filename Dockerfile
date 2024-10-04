@@ -1,5 +1,5 @@
 # Stage 1: Build stage for qBittorrent
-FROM ubuntu:noble AS builder
+FROM ubuntu:24.10 AS builder
 
 WORKDIR /build
 
@@ -37,7 +37,7 @@ RUN apt update && apt install -y --no-install-recommends \
     && cmake --install build
 
 # Stage 2: Final image, copy qBittorrent from builder and install runtime dependencies
-FROM ubuntu:noble
+FROM ubuntu:24.10
 
 # Set working directory
 WORKDIR /opt
