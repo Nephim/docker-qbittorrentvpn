@@ -16,15 +16,15 @@ jobs:
           DESCRIPTION="${{ github.event.client_payload.description }}"
           echo "Description: $DESCRIPTION"
           
-          # Check for beta or rc in the description to exclude pre-releases
+          # Check for 'beta' or 'rc' in the description to exclude pre-releases
           if [[ "$DESCRIPTION" == *beta* ]] || [[ "$DESCRIPTION" == *rc* ]]; then
             echo "Beta or RC version detected in description. Skipping build."
-            echo "::set-output name=skip_build::true"
+            echo "skip_build=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           # Extract version from description using regex
-          # For example, if DESCRIPTION is "/qbittorrent-win32/qbittorrent-5.0.0/README"
+          # Example: From "/qbittorrent-win32/qbittorrent-5.0.0/README" extract "5.0.0"
           VERSION=$(echo "$DESCRIPTION" | grep -oP 'qbittorrent-\K[0-9]+\.[0-9]+\.[0-9]+')
           echo "Version: $VERSION"
 
@@ -34,7 +34,7 @@ jobs:
             exit 1
           fi
 
-          echo "::set-output name=version::$VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Check if build was skipped
         if: steps.extract_version.outputs.skip_build == 'true'
