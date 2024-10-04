@@ -13,7 +13,7 @@ jobs:
         id: extract_version
         shell: bash
         run: |
-          DESCRIPTION="${{ github.event.client_payload.description }}"
+          DESCRIPTION="${{ github.event.client_payload }}"
           echo "Description: $DESCRIPTION"
           
           # Check for 'beta' or 'rc' in the description to exclude pre-releases
