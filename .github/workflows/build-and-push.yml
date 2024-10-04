@@ -41,6 +41,7 @@ jobs:
         run: echo "Build was skipped due to beta or RC version."
 
       - name: Check if Docker image already exists
+        id: check_docker_image
         if: steps.extract_version.outputs.skip_build != 'true'
         env:
           DOCKERHUB_USERNAME: nephim
@@ -51,14 +52,17 @@ jobs:
           https://hub.docker.com/v2/repositories/$DOCKERHUB_USERNAME/$REPO_NAME/tags/$VERSION/)
           if [ "$IMAGE_EXISTS" -eq 200 ]; then
             echo "Image with version $VERSION already exists. Skipping build."
+            echo "skip_build=true" >> "$GITHUB_OUTPUT"
             exit 0
           else
             echo "Image with version $VERSION does not exist. Proceeding to build."
           fi
+      
 
       - name: Checkout repository
-        if: steps.extract_version.outputs.skip_build != 'true'
+        if: steps.extract_version.outputs.skip_build != 'true' && steps.check_docker_image.outputs.skip_build != 'true'
         uses: actions/checkout@v3
+        
 
       - name: Set up Docker Buildx
         if: steps.extract_version.outputs.skip_build != 'true'
